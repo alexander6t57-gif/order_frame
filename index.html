@@ -60,30 +60,12 @@ a.parentNode.insertBefore(o,a)};ttq.load("YOUR_PIXEL_ID");ttq.page()}(window,doc
 </script>
 
 <script>
-  // يبعث ارتفاع البطاقة الحقيقي للأب باش الـiframe يتكيّف تلقائياً على كل الهواتف
-  function sendHeight(){
-    var h = document.getElementById('card').offsetHeight + 40;
-    parent.postMessage({type:'RESIZE', data:{height:h}}, '*');
+  function sendHeight() {
+    var h = document.getElementById('card').scrollHeight + 28;
+    window.parent.postMessage({ frameHeight: h }, '*');
   }
   window.addEventListener('load', sendHeight);
   window.addEventListener('resize', sendHeight);
-
-  var btn=document.getElementById('btn'), em=document.getElementById('email'), err=document.getElementById('err');
-  btn.onclick=async function(){
-    var v=em.value.trim();
-    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){err.textContent="Please enter a valid email.";return;}
-    err.textContent=""; btn.disabled=true; btn.textContent="Reserving...";
-    try{
-      await fetch("https://formspree.io/f/XXXXXXXX",{
-        method:"POST",headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({email:v,source:"cozyglow-reserve"})
-      });
-      if(window.ttq) ttq.track("CompleteRegistration",{description:"reservation"});
-      document.getElementById('form').style.display="none";
-      document.getElementById('ok').style.display="block";
-      sendHeight();   // يعيد ضبط الارتفاع بعد ظهور رسالة النجاح
-    }catch(e){ err.textContent="Something went wrong. Try again.";
-      btn.disabled=false; btn.textContent="Reserve My Spot — No Payment Now"; }
-  };
+  new ResizeObserver(sendHeight).observe(document.getElementById('card'));
 </script>
 </body></html>
