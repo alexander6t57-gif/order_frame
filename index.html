@@ -76,23 +76,26 @@ a.parentNode.insertBefore(o,a)};ttq.load("YOUR_PIXEL_ID");ttq.page()}(window,doc
   };
 </script>
 
-  <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const triggerLink = document.querySelector('.announcement-bar__inner');
+ <script>
+  // ننتظر تحميل الصفحة بالكامل
+  window.addEventListener('load', function() {
+    // نستهدف الرابط الموجود في الشريط العائم في الصفحة الأم
+    const parentLink = window.parent.document.querySelector('.announcement-bar__inner');
     
-    if (triggerLink) {
-      triggerLink.addEventListener('click', function(e) {
-        // 1. نمنع السلوك الافتراضي الذي يسبب التمرير الخاطئ
+    if (parentLink) {
+      parentLink.addEventListener('click', function(e) {
+        // نمنع المتصفح من عمل الـ Scroll الخاطئ الافتراضي
         e.preventDefault();
         
-        // 2. التمرير اليدوي الدقيق
-        const target = document.querySelector('#fw-section-hmac-2987c956-7082-4180-882f-a176f5c62cce');
-        if (target) {
-          // حساب الموقع وخصم مساحة الشريط العائم (120px)
-          const elementPosition = target.getBoundingClientRect().top + window.pageYOffset;
-          const offsetPosition = elementPosition - 150; // هذا الرقم هو "السحر" الذي يرفع الزر للأعلى
-
-          window.scrollTo({
+        // نحدد مكان الإطار في الصفحة الأم
+        const targetSection = window.parent.document.querySelector('#fw-section-hmac-2987c956-7082-4180-882f-a176f5c62cce');
+        
+        if (targetSection) {
+          // نحسب الموقع ونطرح منه مسافة الشريط العائم (لتجنب التغطية)
+          const targetPosition = targetSection.getBoundingClientRect().top + window.parent.pageYOffset;
+          const offsetPosition = targetPosition - 100; // اضبط هذا الرقم (مثلاً 100 أو 150) حتى يظهر الزر فوق الشريط تماماً
+          
+          window.parent.scrollTo({
             top: offsetPosition,
             behavior: "smooth"
           });
