@@ -60,13 +60,19 @@ a.parentNode.insertBefore(o,a)};ttq.load("YOUR_PIXEL_ID");ttq.page()}(window,doc
 </script>
 
 <script>
-  // يبعث ارتفاع البطاقة الحقيقي للأب باش الـiframe يتكيّف تلقائياً على كل الهواتف
+  // يبعث ارتفاع البطاقة الحقيقي لـFourthwall عبر رسالة RESIZE (عدة مرات + بعد تحميل الخط)
   function sendHeight(){
-    var h = document.getElementById('card').offsetHeight + 40;
-    parent.postMessage({type:'RESIZE', data:{height:h}}, '*');
+    var el = document.getElementById('card');
+    if(!el) return;
+    var h = Math.ceil(el.getBoundingClientRect().height) + 40;
+    parent.postMessage({type:'RESIZE', data:{height: h}}, '*');
   }
   window.addEventListener('load', sendHeight);
   window.addEventListener('resize', sendHeight);
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(sendHeight); }
+  setTimeout(sendHeight, 400);
+  setTimeout(sendHeight, 1000);
+  setTimeout(sendHeight, 2000);
 
   var btn=document.getElementById('btn'), em=document.getElementById('email'), err=document.getElementById('err');
   btn.onclick=async function(){
