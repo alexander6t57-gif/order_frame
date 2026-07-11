@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  html,body{margin:0;height:100%;font-family:system-ui,-apple-system,sans-serif;
+    background:#f5f0e8;display:flex;align-items:center;justify-content:center;padding:14px;box-sizing:border-box}
+  .card{max-width:460px;width:100%;background:#fff;border-radius:20px;
+    padding:30px 24px;box-shadow:0 14px 40px rgba(0,0,0,.1);text-align:center}
+  .tag{display:inline-block;background:#241d12;color:#f5e9d0;font-size:.72rem;font-weight:700;
+    letter-spacing:.5px;padding:5px 12px;border-radius:100px;margin-bottom:14px}
+  h2{margin:0 0 6px;font-size:1.4rem;color:#2b2417}
+  p.sub{margin:0 0 18px;color:#6b5d47;font-size:.92rem;line-height:1.5}
+  ul{list-style:none;padding:0;margin:0 0 18px;text-align:left;font-size:.9rem;color:#2b2417}
+  li{margin:9px 0;padding-left:26px;position:relative}
+  li:before{position:absolute;left:0}
+  li.a:before{content:"🔒"} li.b:before{content:"🎁"} li.c:before{content:"⏱️"} li.d:before{content:"💳"}
+  input{width:100%;box-sizing:border-box;padding:14px;border:1px solid #d8cdb8;
+    border-radius:12px;font-size:1rem;margin-bottom:10px}
+  button{width:100%;padding:15px;border:0;border-radius:12px;background:#1f3d2b;
+    color:#fff;font-size:1rem;font-weight:800;cursor:pointer}
+  button:hover{opacity:.92}
+  .ok{display:none;font-size:1.05rem;font-weight:700;color:#1f3d2b;padding:24px 0}
+  .err{color:#b3261e;font-size:.82rem;min-height:16px;text-align:left}
+</style></head><body>
+<div class="card">
+  <div id="form">
+    <span class="tag">🌙 SOLD OUT — RESERVATION OPEN</span>
+    <h2>Reserve your CozyGlow Bundle</h2>
+    <p class="sub">The first batch sold out. Join the list and we'll email you
+      the moment the next limited batch lands.</p>
+    <ul>
+      <li class="a">Lock the $59 price — it returns to $79.90 after</li>
+      <li class="b">Secure the gift now — no scrambling before the big day</li>
+      <li class="c">First access — before we reopen to the public</li>
+      <li class="d">No payment today — just your email to hold your spot</li>
+    </ul>
+    <input id="email" type="email" placeholder="Enter your email" autocomplete="email">
+    <div class="err" id="err"></div>
+    <button id="btn">Reserve My Spot — No Payment Now</button>
+  </div>
+  <div class="ok" id="ok">✅ You're on the list! We'll notify you the second
+    it's back, with your $59 price locked.</div>
+</div>
+
+<!-- TikTok Pixel: بدّل YOUR_PIXEL_ID -->
+<script>
+!function(w,d,t){w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];
+ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"];
+ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat([].slice.call(arguments,0)))}};
+for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);
+ttq.load=function(e){var n="https://analytics.tiktok.com/i18n/pixel/events.js";
+ttq._i=ttq._i||{};ttq._i[e]=[];ttq._i[e]._u=n;var o=d.createElement("script");
+o.async=!0;o.src=n+"?sdkid="+e+"&lib="+t;var a=d.getElementsByTagName("script")[0];
+a.parentNode.insertBefore(o,a)};ttq.load("YOUR_PIXEL_ID");ttq.page()}(window,document,"ttq");
+</script>
+
+<script>
+  const btn=document.getElementById('btn'), em=document.getElementById('email'), err=document.getElementById('err');
+  btn.onclick=async()=>{
+    const v=em.value.trim();
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){err.textContent="Please enter a valid email.";return;}
+    err.textContent=""; btn.disabled=true; btn.textContent="Reserving...";
+    try{
+      await fetch("https://formspree.io/f/XXXXXXXX",{
+        method:"POST",headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({email:v,source:"cozyglow-reserve"})
+      });
+      if(window.ttq) ttq.track("CompleteRegistration",{description:"reservation"});
+      document.getElementById('form').style.display="none";
+      document.getElementById('ok').style.display="block";
+    }catch(e){ err.textContent="Something went wrong. Try again.";
+      btn.disabled=false; btn.textContent="Reserve My Spot — No Payment Now"; }
+  };
+</script>
+</body></html>
