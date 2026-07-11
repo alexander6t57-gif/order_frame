@@ -75,4 +75,31 @@ a.parentNode.insertBefore(o,a)};ttq.load("YOUR_PIXEL_ID");ttq.page()}(window,doc
       btn.disabled=false; btn.textContent="Reserve My Spot — No Payment Now"; }
   };
 </script>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const triggerLink = document.querySelector('.announcement-bar__inner');
+    
+    if (triggerLink) {
+      triggerLink.addEventListener('click', function(e) {
+        // 1. نمنع السلوك الافتراضي الذي يسبب التمرير الخاطئ
+        e.preventDefault();
+        
+        // 2. التمرير اليدوي الدقيق
+        const target = document.querySelector('#fw-section-hmac-2987c956-7082-4180-882f-a176f5c62cce');
+        if (target) {
+          // حساب الموقع وخصم مساحة الشريط العائم (120px)
+          const elementPosition = target.getBoundingClientRect().top + window.pageYOffset;
+          const offsetPosition = elementPosition - 150; // هذا الرقم هو "السحر" الذي يرفع الزر للأعلى
+
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+          });
+        }
+      });
+    }
+  });
+</script>
+
 </body></html>
