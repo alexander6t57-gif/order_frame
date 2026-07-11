@@ -93,7 +93,7 @@ a.parentNode.insertBefore(o,a)};ttq.load("YOUR_PIXEL_ID");ttq.page()}(window,doc
         if (targetSection) {
           // نحسب الموقع ونطرح منه مسافة الشريط العائم (لتجنب التغطية)
           const targetPosition = targetSection.getBoundingClientRect().top + window.parent.pageYOffset;
-          const offsetPosition = targetPosition - 100; // اضبط هذا الرقم (مثلاً 100 أو 150) حتى يظهر الزر فوق الشريط تماماً
+          const offsetPosition = targetPosition - 400; // اضبط هذا الرقم (مثلاً 100 أو 150) حتى يظهر الزر فوق الشريط تماماً
           
           window.parent.scrollTo({
             top: offsetPosition,
