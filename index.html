@@ -3,20 +3,23 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-  html,body{margin:0;height:100%;font-family:'Poppins',system-ui,-apple-system,sans-serif;
-    background:#f4f1eb;display:flex;align-items:center;justify-content:center;padding:14px;box-sizing:border-box}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:auto;font-family:'Poppins',system-ui,-apple-system,sans-serif;
+    background:#f4f1eb;
+    display:flex;align-items:flex-start;justify-content:center;
+    padding:14px;box-sizing:border-box;}
   .card{max-width:460px;width:100%;background:#fff;border-radius:20px;
     padding:30px 24px;box-shadow:0 14px 40px rgba(76,60,47,.12);text-align:center}
   .tag{display:inline-block;background:#4c3c2f;color:#f4f1eb;font-size:.72rem;font-weight:700;
     letter-spacing:.5px;padding:5px 12px;border-radius:100px;margin-bottom:14px}
-  h2{margin:0 0 6px;font-size:1.4rem;color:#4c3c2f;font-weight:800}
+  h2{margin:0 0 6px;font-size:1.4rem;color:#4c3c2f;font-weight:800;line-height:1.25}
   p.sub{margin:0 0 18px;color:#6b5d47;font-size:.92rem;line-height:1.5}
   ul{list-style:none;padding:0;margin:0 0 18px;text-align:left;font-size:.9rem;color:#4c3c2f}
-  li{margin:9px 0;padding-left:26px;position:relative}
-  li:before{position:absolute;left:0}
+  li{margin:9px 0;padding-left:26px;position:relative;line-height:1.4}
+  li:before{position:absolute;left:0;top:0}
   li.a:before{content:"🔒"} li.b:before{content:"🎁"} li.c:before{content:"⏱️"} li.d:before{content:"💳"}
-  input{width:100%;box-sizing:border-box;padding:14px;border:1px solid #d8cdb8;
-    border-radius:12px;font-size:1rem;margin-bottom:10px;font-family:inherit}
+  input{width:100%;padding:14px;border:1px solid #d8cdb8;border-radius:12px;
+    font-size:1rem;margin-bottom:10px;font-family:inherit}
   input:focus{outline:none;border-color:#4c3c2f}
   button{width:100%;padding:15px;border:0;border-radius:12px;background:#4c3c2f;
     color:#f4f1eb;font-size:1rem;font-weight:800;cursor:pointer;font-family:inherit;transition:background .2s}
@@ -24,8 +27,7 @@
   .ok{display:none;font-size:1.05rem;font-weight:700;color:#4c3c2f;padding:24px 0}
   .err{color:#b3261e;font-size:.82rem;min-height:16px;text-align:left}
 </style></head><body>
-  <div id="top-anchor" style="height: 150px; margin-top: -150px;"></div>
-<div class="card">
+<div class="card" id="card">
   <div id="form">
     <span class="tag">🌙 SOLD OUT — RESERVATION OPEN</span>
     <h2>Reserve your CozyGlow Bundle</h2>
@@ -45,7 +47,7 @@
     it's back, with your $59 price locked.</div>
 </div>
 
-<!-- TikTok Pixel: بدّل YOUR_PIXEL_ID -->
+<!-- TikTok Pixel: بدّل YOUR_PIXEL_ID (نفس ID متاع Fourthwall) -->
 <script>
 !function(w,d,t){w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];
 ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"];
@@ -58,51 +60,12 @@ a.parentNode.insertBefore(o,a)};ttq.load("YOUR_PIXEL_ID");ttq.page()}(window,doc
 </script>
 
 <script>
-  const btn=document.getElementById('btn'), em=document.getElementById('email'), err=document.getElementById('err');
-  btn.onclick=async()=>{
-    const v=em.value.trim();
-    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){err.textContent="Please enter a valid email.";return;}
-    err.textContent=""; btn.disabled=true; btn.textContent="Reserving...";
-    try{
-      await fetch("https://formspree.io/f/XXXXXXXX",{
-        method:"POST",headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({email:v,source:"cozyglow-reserve"})
-      });
-      if(window.ttq) ttq.track("CompleteRegistration",{description:"reservation"});
-      document.getElementById('form').style.display="none";
-      document.getElementById('ok').style.display="block";
-    }catch(e){ err.textContent="Something went wrong. Try again.";
-      btn.disabled=false; btn.textContent="Reserve My Spot — No Payment Now"; }
-  };
+  function sendHeight() {
+    var h = document.getElementById('card').scrollHeight + 28;
+    window.parent.postMessage({ frameHeight: h }, '*');
+  }
+  window.addEventListener('load', sendHeight);
+  window.addEventListener('resize', sendHeight);
+  new ResizeObserver(sendHeight).observe(document.getElementById('card'));
 </script>
-
- <script>
-  // ننتظر تحميل الصفحة بالكامل
-  window.addEventListener('load', function() {
-    // نستهدف الرابط الموجود في الشريط العائم في الصفحة الأم
-    const parentLink = window.parent.document.querySelector('.announcement-bar__inner');
-    
-    if (parentLink) {
-      parentLink.addEventListener('click', function(e) {
-        // نمنع المتصفح من عمل الـ Scroll الخاطئ الافتراضي
-        e.preventDefault();
-        
-        // نحدد مكان الإطار في الصفحة الأم
-        const targetSection = window.parent.document.querySelector('#fw-section-hmac-2987c956-7082-4180-882f-a176f5c62cce');
-        
-        if (targetSection) {
-          // نحسب الموقع ونطرح منه مسافة الشريط العائم (لتجنب التغطية)
-          const targetPosition = targetSection.getBoundingClientRect().top + window.parent.pageYOffset;
-          const offsetPosition = targetPosition - 400; // اضبط هذا الرقم (مثلاً 100 أو 150) حتى يظهر الزر فوق الشريط تماماً
-          
-          window.parent.scrollTo({
-            top: offsetPosition,
-            behavior: "smooth"
-          });
-        }
-      });
-    }
-  });
-</script>
-
 </body></html>
