@@ -5,9 +5,8 @@
 <style>
   *{box-sizing:border-box}
   html,body{margin:0;height:auto;font-family:'Poppins',system-ui,-apple-system,sans-serif;
-    background:#f4f1eb;
-    display:flex;align-items:flex-start;justify-content:center;
-    padding:14px;box-sizing:border-box;}
+    background:#f4f1eb;display:flex;align-items:flex-start;justify-content:center;
+    padding:14px;box-sizing:border-box}
   .card{max-width:460px;width:100%;background:#fff;border-radius:20px;
     padding:30px 24px;box-shadow:0 14px 40px rgba(76,60,47,.12);text-align:center}
   .tag{display:inline-block;background:#4c3c2f;color:#f4f1eb;font-size:.72rem;font-weight:700;
@@ -26,6 +25,18 @@
   button:hover{background:#3a2e24}
   .ok{display:none;font-size:1.05rem;font-weight:700;color:#4c3c2f;padding:24px 0}
   .err{color:#b3261e;font-size:.82rem;min-height:16px;text-align:left}
+
+  /* Mobile compact */
+  @media(max-width:480px){
+    html,body{padding:10px}
+    .card{padding:20px 14px;border-radius:16px}
+    h2{font-size:1.2rem}
+    p.sub{font-size:.85rem;margin-bottom:12px}
+    ul{margin-bottom:12px;font-size:.85rem}
+    li{margin:7px 0}
+    input{padding:11px}
+    button{padding:13px}
+  }
 </style></head><body>
 <div class="card" id="card">
   <div id="form">
@@ -60,12 +71,12 @@ a.parentNode.insertBefore(o,a)};ttq.load("YOUR_PIXEL_ID");ttq.page()}(window,doc
 </script>
 
 <script>
-  function sendHeight() {
-    var h = document.getElementById('card').scrollHeight + 28;
-    window.parent.postMessage({ frameHeight: h }, '*');
+  function sendHeight(){
+    var h=document.getElementById('card').scrollHeight+20;
+    window.parent.postMessage({frameHeight:h},'*');
   }
-  window.addEventListener('load', sendHeight);
-  window.addEventListener('resize', sendHeight);
+  window.addEventListener('load',sendHeight);
+  window.addEventListener('resize',sendHeight);
   new ResizeObserver(sendHeight).observe(document.getElementById('card'));
 </script>
 </body></html>
